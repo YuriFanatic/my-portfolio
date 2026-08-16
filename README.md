@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# kien-portfolio
 
-## Getting Started
+Personal portfolio site with three live demos: an online poker game, an AI
+chatbot, and a pseudo-3D racing game.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) + **React 19**
+- **Tailwind CSS 4** — design tokens live in `app/globals.css`
+- **lucide-react** for icons
+- Fonts via `next/font/google`: Fraunces (display), Inter (body), IBM Plex
+  Mono (labels/HUD)
+
+## Run it locally
 
 ```bash
+npm install
+cp .env.local.example .env.local   # optional, see below
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`. Everything renders and the racing game is
+fully playable with zero configuration.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+  layout.js          root layout, fonts, metadata
+  page.js             assembles the page from components/
+  globals.css         design tokens (colors, fonts)
+  api/chat/route.js   chatbot backend (Gemini, or demo-mode fallback)
+components/
+  Nav.js, Hero.js, About.js, Skills.js, Footer.js
+  projects/
+    ProjectsSection.js   lays out the three project cards
+    ProjectCard.js        shared card shell (title, stack, status badge)
+    PokerEmbed.js          iframes the standalone poker deploy
+    ChatbotDemo.js         chat UI, calls /api/chat
+    RacingGameDemo.js      the playable canvas game
+lib/
+  site.js       your name, email, links, résumé path
+  projects.js   copy + stack tags for each project card
+  db.js         stubbed Postgres helper for chat history (commented out)
+```
 
-## Learn More
+## What's live out of the box vs. what needs setup
 
-To learn more about Next.js, take a look at the following resources:
+| Demo | Works with zero config? | To go fully "live" |
+|---|---|---|
+| Racing game | Yes — it's a native React/canvas component | Nothing to do |
+| Chatbot | Yes, in "demo mode" (canned reply) | Set `GEMINI_API_KEY` in `.env.local` / your host's env vars |
+| Poker game | No — shows a "standby" placeholder | Deploy the poker app separately (Railway/Render), then set `NEXT_PUBLIC_POKER_URL` to its URL |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Each project card's status badge reads directly from these env vars, so
+it always reflects what's actually wired up — no need to hand-edit it.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploying to Render
 
-## Deploy on Vercel
+1. Push this repo to GitHub.
+2. On Render: **New +** → **Web Service**, connect the repo.
+3. Build command: `npm install && npm run build`. Start command: `npm run start`.
+4. Add environment variables from `.env.local.example` under the
+   **Environment** tab (`GEMINI_API_KEY`, `DATABASE_URL`,
+   `NEXT_PUBLIC_POKER_URL` — all optional).
+5. Deploy. Render gives you a free `.onrender.com` URL; add a custom
+   domain later under **Settings → Custom Domain**.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Note: Render's free tier spins down after inactivity (~30–60s cold start
+on the next visit). Fine for a demo link, but if you want it always
+instant, the paid Starter tier keeps it warm.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Wiring up chat history (optional)
+
+`lib/db.js` has a ready-to-uncomment Postgres helper and the `CREATE
+TABLE` statement for chat history, matching the original AI Chatbot Site
+project. It's left commented out so the app runs without a database by
+default — see the comments in that file for the three steps to enable it.
+
+## Things to personalize before shipping
+
+- Drop your résumé PDF at `public/resume.pdf` (the nav/hero "Résumé"
+  link already points there).
+- `lib/projects.js` has a `repo` field per project pointing at your
+  GitHub profile — swap in the real repo URL for each project once
+  they're split out (or link to the right folder).
+- Add a profile photo or OG image if you want one — nothing currently
+  references an image file, so there's nothing to break by skipping this.
