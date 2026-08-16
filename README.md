@@ -77,12 +77,3 @@ TABLE` statement for chat history, matching the original AI Chatbot Site
 project. It's left commented out so the app runs without a database by
 default — see the comments in that file for the three steps to enable it.
 
-## Things to personalize before shipping
-
-- Drop your résumé PDF at `public/resume.pdf` (the nav/hero "Résumé"
-  link already points there).
-- `lib/projects.js` has a `repo` field per project pointing at your
-  GitHub profile — swap in the real repo URL for each project once
-  they're split out (or link to the right folder).
-- Add a profile photo or OG image if you want one — nothing currently
-  references an image file, so there's nothing to break by skipping this.
