@@ -47,8 +47,10 @@ const MOUNTAIN_PEAKS_NEAR = [
   { x: 1.5, h: 0.28 },
 ];
 
-export default function RacingGameDemo() {
+export default function RacingGameDemo({ active = true, fill = false, onFrame }) {
   const canvasRef = useRef(null);
+  const activeRef = useRef(active);
+  const onFrameRef = useRef(onFrame);
   const stateRef = useRef({
     carSpeed: 0,
     trackCurvature: 0,
@@ -59,12 +61,21 @@ export default function RacingGameDemo() {
   });
 
   useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
+
+  useEffect(() => {
+    onFrameRef.current = onFrame;
+  }, [onFrame]);
+
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const s = stateRef.current;
     let raf;
     let last = performance.now();
+    let lastSnapshot = 0;
 
     function resize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -78,6 +89,7 @@ export default function RacingGameDemo() {
     const ARROW_KEYS = ["ArrowUp", "ArrowLeft", "ArrowRight", "ArrowDown"];
 
     function onKeyDown(e) {
+      if (!activeRef.current) return;
       if (document.activeElement !== canvas) return;
       if (ARROW_KEYS.includes(e.key)) e.preventDefault();
       if (e.key === "ArrowUp") s.keys.up = true;
@@ -247,10 +259,21 @@ export default function RacingGameDemo() {
     }
 
     function loop(now) {
+      if (!activeRef.current) {
+        raf = requestAnimationFrame(loop);
+        last = now;
+        return;
+      }
       const elapsedTime = Math.min((now - last) / 1000, 0.05);
       last = now;
       update(elapsedTime);
       draw();
+
+      if (onFrameRef.current && now - lastSnapshot > 200) {
+        lastSnapshot = now;
+        onFrameRef.current(canvas.toDataURL("image/jpeg", 0.5));
+      }
+
       raf = requestAnimationFrame(loop);
     }
     raf = requestAnimationFrame(loop);
@@ -269,11 +292,21 @@ export default function RacingGameDemo() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-border">
+    <div
+      className={
+        fill
+          ? "relative flex h-full w-full flex-col overflow-hidden"
+          : "relative overflow-hidden rounded-xl border border-border"
+      }
+    >
       <canvas
         ref={canvasRef}
         tabIndex={0}
-        className="h-72 w-full touch-none outline-none sm:h-80"
+        className={
+          fill
+            ? "min-h-0 flex-1 w-full touch-none outline-none"
+            : "h-72 w-full touch-none outline-none sm:h-80"
+        }
       />
 
       <div className="flex items-center justify-between border-t border-border bg-surface-2 px-4 py-2">

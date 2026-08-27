@@ -1,12 +1,18 @@
 // Set NEXT_PUBLIC_POKER_URL once the poker game is deployed on
 // Railway/Render (see .env.local.example). Until then this renders a
 // standby placeholder instead of a broken iframe.
-export default function PokerEmbed() {
+export default function PokerEmbed({ fill = false }) {
   const url = process.env.NEXT_PUBLIC_POKER_URL;
 
   if (!url) {
     return (
-      <div className="flex h-64 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface-2 text-center">
+      <div
+        className={
+          fill
+            ? "mx-auto flex h-full w-full max-w-xl flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface-2 text-center"
+            : "flex h-64 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface-2 text-center"
+        }
+      >
         <p className="font-mono text-xs uppercase tracking-[0.15em] text-text-muted">
           Standby
         </p>
@@ -19,11 +25,17 @@ export default function PokerEmbed() {
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border">
+    <div
+      className={
+        fill
+          ? "mx-auto h-full w-full max-w-4xl overflow-hidden rounded-xl border border-border"
+          : "overflow-hidden rounded-xl border border-border"
+      }
+    >
       <iframe
         src={url}
         title="Online Poker Game"
-        className="h-[600px] w-full"
+        className={fill ? "h-full w-full" : "h-[600px] w-full"}
         loading="lazy"
         allow="clipboard-write"
       />

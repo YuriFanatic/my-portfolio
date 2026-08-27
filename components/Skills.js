@@ -33,36 +33,41 @@ const groups = [
 
 export default function Skills() {
   return (
-    <section id="skills" className="border-b border-border/70">
-      <div className="mx-auto max-w-5xl px-6 py-20 sm:py-28">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold">
-          Skills
-        </p>
-        <h2 className="mt-4 font-display text-3xl sm:text-4xl">
-          Things I'm Good At
-        </h2>
+    <section id="skills" className="border-b border-border bg-surface px-6 py-24 md:px-16">
+      <div className="mx-auto max-w-6xl">
+        <div
+          className="mb-12 font-display text-5xl"
+          style={{ color: "var(--color-green,#a6e3a1)" }}
+        >
+          <span className="text-text-muted">## </span>skills
+        </div>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {groups.map((group) => (
-            <div
-              key={group.label}
-              className="rounded-2xl border border-border bg-surface p-6"
-            >
-              <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-text-muted">
-                {`// ${group.label}`}
-              </p>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-full border border-border bg-surface-2 px-3 py-1 text-xs text-text"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="wm-window">
+          <div className="wm-titlebar">
+            <span className="wm-dot" style={{ background: "#f38ba8" }} />
+            <span className="wm-dot" style={{ background: "#f9e2af" }} />
+            <span className="wm-dot" style={{ background: "#a6e3a1" }} />
+            <span className="ml-2">skills.sh</span>
+          </div>
+          <div className="grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
+            {groups.map((group) => (
+              <div key={group.label}>
+                <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-text-muted">
+                  {`// ${group.label}`}
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <li
+                      key={item}
+                      className="bg-surface-2 px-2 py-1 font-mono text-xs text-text"
+                    >
+                      #{item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

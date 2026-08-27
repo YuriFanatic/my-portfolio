@@ -10,7 +10,7 @@ const embeds = {
   racing: RacingGameDemo,
 };
 
-export default function ProjectsSection() {
+export default function ProjectsSection({ active = true }) {
   // Status badges reflect real deploy state, not decoration:
   // - poker only goes "live" once its standalone deploy URL is set.
   // - the racing game always runs, since it ships natively with this site.
@@ -23,17 +23,14 @@ export default function ProjectsSection() {
   };
 
   return (
-    <section id="projects" className="border-b border-border/70">
-      <div className="mx-auto max-w-5xl px-6 py-20 sm:py-28">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold">
-          Projects
-        </p>
-        <h2 className="mt-4 font-display text-3xl sm:text-4xl">
-          Three things you can try right now.
-        </h2>
-        <p className="mt-4 max-w-2xl text-base text-text-muted">
-          These run for real, right on this page! Statuses
-          below reflect whether each demo is actually wired up yet.
+    <section id="projects" className="border-b border-border px-6 py-24 md:px-16">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-4 font-display text-5xl" style={{ color: "var(--color-blue,#89b4fa)" }}>
+          <span className="text-text-muted">## </span>projects
+        </div>
+        <p className="max-w-2xl font-mono text-sm text-text-muted">
+          These run for real, right on this page! Statuses below reflect
+          whether each demo is actually wired up yet.
         </p>
 
         <div className="mt-10 flex flex-col gap-6">
@@ -45,10 +42,22 @@ export default function ProjectsSection() {
                 project={project}
                 status={statusFor[project.id]}
               >
-                <Embed />
+                <Embed active={active} />
               </ProjectCard>
             );
           })}
+        </div>
+
+        <div className="mt-6 text-center font-mono text-xs text-text-muted">
+          more at{" "}
+          <a
+            href="https://github.com/YuriFanatic"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-gold"
+          >
+            github.com/YuriFanatic →
+          </a>
         </div>
       </div>
     </section>

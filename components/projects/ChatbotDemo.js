@@ -8,7 +8,7 @@ const GREETING = {
   content: "Hey, I'm Kien's chatbot demo. Ask me something.",
 };
 
-export default function ChatbotDemo() {
+export default function ChatbotDemo({ fill = false, onPreviewChange }) {
   const [messages, setMessages] = useState([GREETING]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,10 @@ export default function ChatbotDemo() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [messages, loading]);
+
+  useEffect(() => {
+    onPreviewChange?.(messages[messages.length - 1]);
+  }, [messages, onPreviewChange]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -57,7 +61,13 @@ export default function ChatbotDemo() {
   }
 
   return (
-    <div className="flex h-96 flex-col overflow-hidden rounded-xl border border-border bg-surface-2">
+    <div
+      className={
+        fill
+          ? "mx-auto flex h-full w-full max-w-xl flex-col overflow-hidden rounded-xl border border-border bg-surface-2"
+          : "flex h-96 flex-col overflow-hidden rounded-xl border border-border bg-surface-2"
+      }
+    >
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-4">
         {messages.map((m, i) => (
           <div

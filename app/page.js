@@ -1,21 +1,12 @@
 import Nav from "@/components/Nav";
-import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Skills from "@/components/Skills";
-import ProjectsSection from "@/components/projects/ProjectsSection";
-import Footer from "@/components/Footer";
+import FullscreenCarousel from "@/components/carousel/FullscreenCarousel";
+import { SelectorProvider } from "@/components/carousel/SelectorContext";
 
 export default function Home() {
   return (
-    <>
+    <SelectorProvider>
       <Nav />
-      <main className="flex-1">
-        <Hero />
-        <About />
-        <Skills />
-        <ProjectsSection />
-      </main>
-      <Footer />
-    </>
+      <FullscreenCarousel />
+    </SelectorProvider>
   );
 }

@@ -1,131 +1,195 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { site } from "@/lib/site";
 
-export default function Hero() {
-  const canvasRef = useRef(null);
+const TERM_LINES = [
+  "whoami",
+  "kien ngo — cs grad, fullstack dev, ai enthusiast",
+  "cat interests.txt",
+  "fullstack apps · llm integration · game dev · sql · open source",
+  "echo $LOCATION",
+  `${site.location.toLowerCase()} · open to work`,
+];
+
+const STATUS_ITEMS = [
+  { label: "role", value: "entry-level SWE" },
+  { label: "location", value: site.location },
+  { label: "email", value: site.email },
+  { label: "github", value: site.github.replace("https://github.com/", "") },
+];
+
+const BADGES = [
+  { text: "SFSU GRAD", color: "var(--color-blue,#89b4fa)" },
+  { text: "FULLSTACK", color: "var(--color-gold)" },
+  { text: "AI/ML", color: "var(--color-green,#a6e3a1)" },
+  { text: "OPEN TO WORK", color: "var(--color-flare)" },
+];
+
+function TypewriterText({ lines }) {
+  const [displayed, setDisplayed] = useState([]);
+  const [currentLine, setCurrentLine] = useState(0);
+  const [currentChar, setCurrentChar] = useState(0);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    let frameId;
-    let phase = 0;
-    let lastTime = performance.now();
-
-    function resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const { clientWidth, clientHeight } = canvas;
-      canvas.width = clientWidth * dpr;
-      canvas.height = clientHeight * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (currentLine >= lines.length) {
+      setDone(true);
+      return;
     }
-    resize();
-    window.addEventListener("resize", resize);
-
-    const STRIPE_COUNT = 10;
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    function draw(now) {
-      const dt = Math.min((now - lastTime) / 1000, 0.05);
-      lastTime = now;
-      if (!prefersReducedMotion) {
-        phase = (phase + dt * 0.12) % 1;
-      }
-
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      ctx.clearRect(0, 0, w, h);
-
-      const horizonY = h * 0.34;
-      const centerX = w * 0.5;
-      const topHalfWidth = w * 0.02;
-      const bottomHalfWidth = w * 0.62;
-
-      // Road edges converging to a vanishing point
-      ctx.strokeStyle = "rgba(205, 163, 73, 0.28)";
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(centerX - topHalfWidth, horizonY);
-      ctx.lineTo(centerX - bottomHalfWidth, h);
-      ctx.moveTo(centerX + topHalfWidth, horizonY);
-      ctx.lineTo(centerX + bottomHalfWidth, h);
-      ctx.stroke();
-
-      // Scrolling rumble stripes, foreshortened toward the horizon —
-      // the same perspective trick the racing game demo uses.
-      for (let i = 0; i < STRIPE_COUNT; i++) {
-        const p = (i / STRIPE_COUNT + phase) % 1;
-        const ease = p * p;
-        const y = horizonY + (h - horizonY) * ease;
-        const halfWidth = topHalfWidth + (bottomHalfWidth - topHalfWidth) * ease;
-        const stripeH = 1 + ease * 5;
-        const opacity = 0.08 + ease * 0.3;
-        const isGold = i % 2 === 0;
-        ctx.fillStyle = isGold
-          ? `rgba(205, 163, 73, ${opacity})`
-          : `rgba(243, 239, 228, ${opacity * 0.5})`;
-        ctx.fillRect(centerX - halfWidth * 0.14, y, halfWidth * 0.28, stripeH);
-      }
-
-      frameId = requestAnimationFrame(draw);
+    const line = lines[currentLine];
+    if (currentChar < line.length) {
+      const t = setTimeout(() => setCurrentChar((c) => c + 1), 35);
+      return () => clearTimeout(t);
     }
+    const t = setTimeout(() => {
+      setDisplayed((d) => [...d, line]);
+      setCurrentLine((l) => l + 1);
+      setCurrentChar(0);
+    }, 200);
+    return () => clearTimeout(t);
+  }, [currentLine, currentChar, lines]);
 
-    frameId = requestAnimationFrame(draw);
-
-    return () => {
-      cancelAnimationFrame(frameId);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
+  const activeLine =
+    currentLine < lines.length ? lines[currentLine].slice(0, currentChar) : "";
 
   return (
-    <section id="top" className="relative overflow-hidden border-b border-border/70">
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 h-full w-full opacity-80"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(16,30,23,0) 0%, rgba(16,30,23,0.4) 55%, rgba(16,30,23,1) 100%)",
-        }}
-        aria-hidden="true"
-      />
+    <div className="font-mono text-sm leading-relaxed">
+      {displayed.map((l, i) => (
+        <div key={i}>
+          <span style={{ color: "#a6e3a1" }}>❯ </span>
+          <span className="text-text">{l}</span>
+        </div>
+      ))}
+      {!done && currentLine < lines.length && (
+        <div>
+          <span style={{ color: "#a6e3a1" }}>❯ </span>
+          <span className="text-text">{activeLine}</span>
+          <span className="cursor" />
+        </div>
+      )}
+    </div>
+  );
+}
 
-      <div className="relative mx-auto max-w-5xl px-6 pt-28 pb-24 sm:pt-36 sm:pb-32">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-gold">
-          {site.name} — {site.role}
-        </p>
-        <h1 className="mt-5 max-w-2xl font-display text-4xl leading-[1.1] sm:text-6xl">
-          I build systems you can{" "}
-          <span className="italic text-gold-soft">actually play with.</span>
-        </h1>
-        <p className="mt-6 max-w-xl text-base leading-relaxed text-text-muted sm:text-lg">
-          Computer Science graduate from San Francisco State, shipping
-          full-stack apps with React, Node, and PostgreSQL — with a growing
-          interest in applied ML. Three of my builds are live below: pull up
-          a hand of poker, take a lap around the track, or talk to a chatbot
-          I wired up myself.
-        </p>
-        <div className="mt-9 flex flex-wrap gap-4">
-          <a
-            href="#projects"
-            className="rounded-full bg-gold px-6 py-3 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
-          >
-            See the projects
-          </a>
-          <a
-            href={`mailto:${site.email}`}
-            className="rounded-full border border-border px-6 py-3 text-sm text-text transition-colors hover:border-gold hover:text-gold"
-          >
-            Email me
-          </a>
+export default function Hero() {
+  return (
+    <section
+      id="home"
+      className="flex min-h-screen flex-col justify-center border-b border-border px-6 py-16 md:px-16"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <div className="grid gap-8 md:grid-cols-2 md:items-start">
+          <div>
+            <div className="mb-6 flex flex-wrap gap-2">
+              {BADGES.map((b) => (
+                <span
+                  key={b.text}
+                  className="border px-2 py-0.5 font-mono text-xs"
+                  style={{ color: b.color, borderColor: b.color }}
+                >
+                  {b.text}
+                </span>
+              ))}
+            </div>
+
+            <h1
+              className="mb-4 font-display leading-none text-text"
+              style={{ fontSize: "clamp(72px, 10vw, 140px)", letterSpacing: "2px" }}
+            >
+              KIEN
+              <br />
+              <span className="text-gold">NGO</span>
+            </h1>
+
+            <div className="mb-8 font-mono text-sm text-text-muted">
+              <span style={{ color: "var(--color-blue,#89b4fa)" }}>const</span>{" "}
+              role ={" "}
+              <span style={{ color: "var(--color-green,#a6e3a1)" }}>
+                &quot;fullstack dev + ai integrator&quot;
+              </span>
+              <span className="blink text-gold">;</span>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="#projects"
+                className="border px-4 py-2 font-mono text-sm transition-colors hover:bg-surface-2"
+                style={{ borderColor: "var(--color-gold)", color: "var(--color-gold)" }}
+              >
+                ~/projects
+              </a>
+              <a
+                href={site.github}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="border px-4 py-2 font-mono text-sm transition-colors hover:bg-surface-2"
+                style={{ borderColor: "var(--color-border)", color: "var(--color-text)" }}
+              >
+                ~/github
+              </a>
+              <a
+                href={`mailto:${site.email}`}
+                className="border px-4 py-2 font-mono text-sm transition-colors hover:bg-surface-2"
+                style={{ borderColor: "var(--color-border)", color: "var(--color-text)" }}
+              >
+                ~/email
+              </a>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div className="wm-window">
+              <div className="wm-titlebar">
+                <span className="wm-dot" style={{ background: "#f38ba8" }} />
+                <span className="wm-dot" style={{ background: "#f9e2af" }} />
+                <span className="wm-dot" style={{ background: "#a6e3a1" }} />
+                <span className="ml-2">kitty — zsh</span>
+              </div>
+              <div className="p-4" style={{ minHeight: "220px" }}>
+                <TypewriterText lines={TERM_LINES} />
+              </div>
+            </div>
+
+            <div className="wm-window">
+              <div className="wm-titlebar">
+                <span className="wm-dot" style={{ background: "#f38ba8" }} />
+                <span className="wm-dot" style={{ background: "#f9e2af" }} />
+                <span className="wm-dot" style={{ background: "#a6e3a1" }} />
+                <span className="ml-2">neofetch</span>
+              </div>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 p-4 font-mono text-xs">
+                <div className="col-span-2 mb-2 text-gold">
+                  kien@sfstate
+                  <span style={{ color: "var(--color-border)" }}> ──────────────</span>
+                </div>
+                {STATUS_ITEMS.map((s) => (
+                  <div key={s.label} className="flex gap-2">
+                    <span className="text-gold">{s.label}</span>
+                    <span className="text-text-muted">{s.value}</span>
+                  </div>
+                ))}
+                <div className="col-span-2 mt-3 flex gap-1">
+                  {[
+                    "#f38ba8",
+                    "#f9e2af",
+                    "#a6e3a1",
+                    "#89dceb",
+                    "#89b4fa",
+                    "#cba6f7",
+                    "#cdd6f4",
+                  ].map((c) => (
+                    <span key={c} className="inline-block h-4 w-5" style={{ background: c }} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-16 pb-8 text-center font-mono text-xs text-text-muted">
+          <span className="blink">▼</span> scroll to explore{" "}
+          <span className="blink">▼</span>
         </div>
       </div>
     </section>
