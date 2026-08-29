@@ -1,3 +1,6 @@
+import WmWindow from "@/components/ui/WmWindow";
+import SectionHeading from "@/components/ui/SectionHeading";
+
 const groups = [
   {
     label: "Languages",
@@ -35,20 +38,9 @@ export default function Skills() {
   return (
     <section id="skills" className="border-b border-border bg-surface px-6 py-24 md:px-16">
       <div className="mx-auto max-w-6xl">
-        <div
-          className="mb-12 font-display text-5xl"
-          style={{ color: "var(--color-green,#a6e3a1)" }}
-        >
-          <span className="text-text-muted">## </span>skills
-        </div>
+        <SectionHeading name="skills" color="#a6e3a1" />
 
-        <div className="wm-window">
-          <div className="wm-titlebar">
-            <span className="wm-dot" style={{ background: "#f38ba8" }} />
-            <span className="wm-dot" style={{ background: "#f9e2af" }} />
-            <span className="wm-dot" style={{ background: "#a6e3a1" }} />
-            <span className="ml-2">skills.sh</span>
-          </div>
+        <WmWindow title="skills.sh">
           <div className="grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
             {groups.map((group) => (
               <div key={group.label}>
@@ -68,7 +60,7 @@ export default function Skills() {
               </div>
             ))}
           </div>
-        </div>
+        </WmWindow>
       </div>
     </section>
   );

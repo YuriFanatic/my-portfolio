@@ -8,7 +8,10 @@ const GREETING = {
   content: "Hey, I'm Kien's chatbot demo. Ask me something.",
 };
 
-export default function ChatbotDemo({ fill = false, onPreviewChange }) {
+// active/onFrame are part of the shared demo-embed prop contract (see
+// ProjectsSection.js / FullscreenCarousel.js) but unused here -- the
+// chatbot has no animation loop to pause.
+export default function ChatbotDemo({ fill = false, onPreviewChange, active, onFrame }) {
   const [messages, setMessages] = useState([GREETING]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);

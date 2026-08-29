@@ -3,7 +3,7 @@
 import { createContext, useContext, useState } from "react";
 import { PALETTES } from "@/lib/palettes";
 
-const SelectorContext = createContext({
+const WorkspaceContext = createContext({
   open: false,
   setOpen: () => {},
   activeId: "home",
@@ -12,17 +12,17 @@ const SelectorContext = createContext({
   setPalette: () => {},
 });
 
-export function SelectorProvider({ children }) {
+export function WorkspaceProvider({ children }) {
   const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState("home");
   const [palette, setPalette] = useState(PALETTES[0]);
   return (
-    <SelectorContext.Provider value={{ open, setOpen, activeId, setActiveId, palette, setPalette }}>
+    <WorkspaceContext.Provider value={{ open, setOpen, activeId, setActiveId, palette, setPalette }}>
       {children}
-    </SelectorContext.Provider>
+    </WorkspaceContext.Provider>
   );
 }
 
-export function useSelector() {
-  return useContext(SelectorContext);
+export function useWorkspace() {
+  return useContext(WorkspaceContext);
 }

@@ -1,16 +1,12 @@
 import { ExternalLink } from "lucide-react";
+import { WmTitlebar } from "@/components/ui/WmWindow";
 
 export default function ProjectCard({ project, status, children }) {
   const isLive = status === "LIVE";
 
   return (
     <article id={project.id} className="wm-window scroll-mt-24">
-      <div className="wm-titlebar">
-        <span className="wm-dot" style={{ background: "#f38ba8" }} />
-        <span className="wm-dot" style={{ background: "#f9e2af" }} />
-        <span className="wm-dot" style={{ background: "#a6e3a1" }} />
-        <span className="ml-2">~/projects/{project.id}</span>
-      </div>
+      <WmTitlebar title={`~/projects/${project.id}`} />
 
       <div className="p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">

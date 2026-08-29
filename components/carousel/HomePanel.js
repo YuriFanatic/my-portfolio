@@ -1,16 +1,16 @@
 "use client";
 
-import HomeSectionNav from "@/components/HomeSectionNav";
+import HomeSectionNav from "@/components/carousel/HomeSectionNav";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
 import ProjectsSection from "@/components/projects/ProjectsSection";
 import Footer from "@/components/Footer";
-import { useSelector } from "@/components/carousel/SelectorContext";
+import { useWorkspace } from "@/components/carousel/WorkspaceContext";
 
 export default function HomePanel({ active }) {
-  const { palette } = useSelector();
+  const { palette } = useWorkspace();
 
   // Every component under here is styled with Tailwind's bg-bg/text-gold/
   // etc. utilities, which just resolve to var(--color-bg) and friends --

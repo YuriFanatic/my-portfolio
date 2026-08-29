@@ -47,7 +47,10 @@ const MOUNTAIN_PEAKS_NEAR = [
   { x: 1.5, h: 0.28 },
 ];
 
-export default function RacingGameDemo({ active = true, fill = false, onFrame }) {
+// onPreviewChange is part of the shared demo-embed prop contract (see
+// ProjectsSection.js / FullscreenCarousel.js) but unused here -- the
+// racing game reports its own preview via onFrame instead.
+export default function RacingGameDemo({ active = true, fill = false, onFrame, onPreviewChange }) {
   const canvasRef = useRef(null);
   const activeRef = useRef(active);
   const onFrameRef = useRef(onFrame);

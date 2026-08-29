@@ -127,31 +127,6 @@ body {
   animation: blink 1s step-end infinite;
 }
 
-@keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-2px, 1px);
-  }
-  40% {
-    transform: translate(2px, -1px);
-  }
-  60% {
-    transform: translate(-1px, 2px);
-  }
-  80% {
-    transform: translate(1px, -2px);
-  }
-  100% {
-    transform: translate(0);
-  }
-}
-
-.glitch:hover {
-  animation: glitch 0.3s ease-in-out;
-}
-
 @keyframes cursor-blink {
   0%,
   100% {
@@ -168,17 +143,4 @@ body {
   height: 1.2em;
   vertical-align: text-bottom;
   animation: cursor-blink 1s step-end infinite;
-}
-
-@keyframes fill {
-  from {
-    width: 0%;
-  }
-  to {
-    width: var(--target-width);
-  }
-}
-
-.skill-bar-fill {
-  animation: fill 1.5s ease-out forwards;
 }

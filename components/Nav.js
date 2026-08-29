@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import { LayoutGrid } from "lucide-react";
 import { site } from "@/lib/site";
-import { useSelector } from "@/components/carousel/SelectorContext";
+import { useWorkspace } from "@/components/carousel/WorkspaceContext";
 import { WORKSPACE_PAGES } from "@/lib/workspacePages";
 import { PALETTES } from "@/lib/palettes";
-import PaletteSwitcher from "@/components/PaletteSwitcher";
+import PaletteSwitcher from "@/components/carousel/PaletteSwitcher";
 
 export default function Nav() {
   const [time, setTime] = useState(null);
-  const { setOpen, activeId, setActiveId, palette, setPalette } = useSelector();
+  const { setOpen, activeId, setActiveId, palette, setPalette } = useWorkspace();
 
   useEffect(() => {
     setTime(new Date());
@@ -77,7 +77,7 @@ export default function Nav() {
       </div>
 
       <div className="hidden sm:block" style={{ color: chromeTheme.accent }}>
-        kien@portfolio ~ Hyprland
+        kien@portfolio
       </div>
 
       <div className="flex items-center gap-3">

@@ -7,9 +7,13 @@ import RacingGameDemo from "@/components/projects/RacingGameDemo";
 import HomePanel from "@/components/carousel/HomePanel";
 import DummyPage from "@/components/carousel/DummyPage";
 import WorkspaceSwitcher from "@/components/carousel/WorkspaceSwitcher";
-import { useSelector } from "@/components/carousel/SelectorContext";
+import { useWorkspace } from "@/components/carousel/WorkspaceContext";
 import { WORKSPACE_PAGES } from "@/lib/workspacePages";
 
+// All three demo components share one prop contract --
+// { active, fill, onFrame, onPreviewChange } -- so every embed can be
+// rendered the same way regardless of which project it is; each one
+// simply ignores whichever of those props it doesn't need.
 const demoEmbeds = { poker: PokerEmbed, chatbot: ChatbotDemo, racing: RacingGameDemo };
 
 // Every panel renders all the time -- only the active one is visible and
@@ -22,7 +26,7 @@ const demoEmbeds = { poker: PokerEmbed, chatbot: ChatbotDemo, racing: RacingGame
 export default function FullscreenCarousel() {
   const [racingSnapshot, setRacingSnapshot] = useState(null);
   const [chatPreview, setChatPreview] = useState(null);
-  const { open, setOpen, activeId, setActiveId } = useSelector();
+  const { open, setOpen, activeId, setActiveId } = useWorkspace();
 
   return (
     <main className="relative flex-1 overflow-hidden bg-bg">
@@ -42,9 +46,25 @@ export default function FullscreenCarousel() {
               {page.kind === "dummy" && <DummyPage page={page.theme} index={index + 1} />}
               {page.kind === "demo" &&
                 (page.id === "racing" ? (
-                  <RacingGameDemo active={isActive} fill onFrame={setRacingSnapshot} />
+                  <DemoEmbed
+                    id={page.id}
+                    active={isActive}
+                    fill
+                    onFrame={setRacingSnapshot}
+                    onPreviewChange={setChatPreview}
+                  />
                 ) : (
-                  <DemoPanel id={page.id} setChatPreview={setChatPreview} />
+                  <div className="flex h-full w-full items-center justify-center p-6 sm:p-10">
+                    <div className="h-[min(78vh,640px)] w-full">
+                      <DemoEmbed
+                        id={page.id}
+                        active={isActive}
+                        fill
+                        onFrame={setRacingSnapshot}
+                        onPreviewChange={setChatPreview}
+                      />
+                    </div>
+                  </div>
                 ))}
             </div>
           );
@@ -65,13 +85,7 @@ export default function FullscreenCarousel() {
   );
 }
 
-function DemoPanel({ id, setChatPreview }) {
+function DemoEmbed({ id, ...props }) {
   const Embed = demoEmbeds[id];
-  return (
-    <div className="flex h-full w-full items-center justify-center p-6 sm:p-10">
-      <div className="h-[min(78vh,640px)] w-full">
-        <Embed fill {...(id === "chatbot" ? { onPreviewChange: setChatPreview } : {})} />
-      </div>
-    </div>
-  );
+  return <Embed {...props} />;
 }

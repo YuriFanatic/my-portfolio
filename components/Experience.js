@@ -1,3 +1,6 @@
+import WmWindow from "@/components/ui/WmWindow";
+import SectionHeading from "@/components/ui/SectionHeading";
+
 const EXPERIENCE = [
   {
     company: "QA Construction",
@@ -24,13 +27,12 @@ const EXPERIENCE = [
   {
     company: "Mexican Brothers Market",
     location: "San Jose, CA",
-    role: "Retail | Store Clerk – Shift Supervisor",
+    role: "Retail | Store Clerk",
     period: "02/2018 – 07/2023",
     color: "#fab387",
     bullets: [
-      "Delivered personalized customer service to over 30 customers daily in a high-paced environment.",
-      "Led as Shift Supervisor — delegated tasks and maintained a positive, productive work environment.",
-      "Managed inventory, cash transactions, and regulatory compliance.",
+      "Delivered personalized customer service to countless customers daily in a high-paced environment.",
+      "Managed inventory, and cash transactions.",
     ],
   },
 ];
@@ -39,21 +41,14 @@ export default function Experience() {
   return (
     <section id="experience" className="border-b border-border px-6 py-24 md:px-16">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-12 font-display text-5xl" style={{ color: "#fab387" }}>
-          <span className="text-text-muted">## </span>experience
-        </div>
+        <SectionHeading name="experience" color="#fab387" />
 
         <div className="flex flex-col gap-6">
           {EXPERIENCE.map((exp) => (
-            <div key={exp.company} className="wm-window">
-              <div className="wm-titlebar">
-                <span className="wm-dot" style={{ background: "#f38ba8" }} />
-                <span className="wm-dot" style={{ background: "#f9e2af" }} />
-                <span className="wm-dot" style={{ background: "#a6e3a1" }} />
-                <span className="ml-2">
-                  {exp.company.toLowerCase().replace(/\s+/g, "-")}.log
-                </span>
-              </div>
+            <WmWindow
+              key={exp.company}
+              title={`${exp.company.toLowerCase().replace(/\s+/g, "-")}.log`}
+            >
               <div className="p-5">
                 <div className="mb-3 flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
                   <div>
@@ -86,7 +81,7 @@ export default function Experience() {
                   ))}
                 </ul>
               </div>
-            </div>
+            </WmWindow>
           ))}
         </div>
       </div>

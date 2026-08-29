@@ -1,3 +1,5 @@
+import { WM_DOT_COLORS } from "@/components/ui/WmWindow";
+
 // One of the placeholder "other workspaces" in the switcher -- a themed
 // stand-in page, not a real project.
 export default function DummyPage({ page, index }) {
@@ -55,9 +57,12 @@ export default function DummyPage({ page, index }) {
             className="flex items-center gap-1.5"
             style={{ padding: "6px 12px", borderBottom: `1px solid ${page.accent}22`, fontSize: "11px" }}
           >
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#f38ba8", display: "inline-block" }} />
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#f9e2af", display: "inline-block" }} />
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#a6e3a1", display: "inline-block" }} />
+            {WM_DOT_COLORS.map((c) => (
+              <span
+                key={c}
+                style={{ width: 10, height: 10, borderRadius: "50%", background: c, display: "inline-block" }}
+              />
+            ))}
             <span style={{ marginLeft: "8px", opacity: 0.5 }}>kitty — {page.name}</span>
           </div>
           <div style={{ padding: "16px", fontSize: "13px", lineHeight: "1.8" }}>

@@ -3,6 +3,7 @@ import ProjectCard from "./ProjectCard";
 import PokerEmbed from "./PokerEmbed";
 import ChatbotDemo from "./ChatbotDemo";
 import RacingGameDemo from "./RacingGameDemo";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 const embeds = {
   poker: PokerEmbed,
@@ -25,9 +26,7 @@ export default function ProjectsSection({ active = true }) {
   return (
     <section id="projects" className="border-b border-border px-6 py-24 md:px-16">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-4 font-display text-5xl" style={{ color: "var(--color-blue,#89b4fa)" }}>
-          <span className="text-text-muted">## </span>projects
-        </div>
+        <SectionHeading name="projects" color="#89b4fa" />
         <p className="max-w-2xl font-mono text-sm text-text-muted">
           These run for real, right on this page! Statuses below reflect
           whether each demo is actually wired up yet.

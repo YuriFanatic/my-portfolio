@@ -1,4 +1,6 @@
 import { site } from "@/lib/site";
+import WmWindow from "@/components/ui/WmWindow";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -17,18 +19,10 @@ export default function Footer() {
   return (
     <footer id="contact" className="mt-auto px-6 py-24 md:px-16">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-12 font-display text-5xl" style={{ color: "var(--color-flare)" }}>
-          <span className="text-text-muted">## </span>contact
-        </div>
+        <SectionHeading name="contact" color="var(--color-flare)" />
 
         <div className="grid gap-6 md:grid-cols-2">
-          <div className="wm-window">
-            <div className="wm-titlebar">
-              <span className="wm-dot" style={{ background: "#f38ba8" }} />
-              <span className="wm-dot" style={{ background: "#f9e2af" }} />
-              <span className="wm-dot" style={{ background: "#a6e3a1" }} />
-              <span className="ml-2">links.txt</span>
-            </div>
+          <WmWindow title="links.txt">
             <div className="p-4">
               {links.map((l) => (
                 <a
@@ -47,19 +41,13 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-          </div>
+          </WmWindow>
 
-          <div className="wm-window">
-            <div className="wm-titlebar">
-              <span className="wm-dot" style={{ background: "#f38ba8" }} />
-              <span className="wm-dot" style={{ background: "#f9e2af" }} />
-              <span className="wm-dot" style={{ background: "#a6e3a1" }} />
-              <span className="ml-2">availability.txt</span>
-            </div>
+          <WmWindow title="availability.txt">
             <div className="p-4 text-center font-mono">
               <div
                 className="font-display tracking-widest"
-                style={{ fontSize: "36px", color: "var(--color-green,#a6e3a1)" }}
+                style={{ fontSize: "36px", color: "#a6e3a1" }}
               >
                 AVAILABLE
               </div>
@@ -71,7 +59,7 @@ export default function Footer() {
                 {site.location} + remote
               </div>
             </div>
-          </div>
+          </WmWindow>
         </div>
 
         <p className="mt-14 text-center font-mono text-xs text-text-muted">

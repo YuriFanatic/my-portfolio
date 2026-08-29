@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { site } from "@/lib/site";
+import WmWindow from "@/components/ui/WmWindow";
 
 const TERM_LINES = [
   "whoami",
@@ -20,9 +21,9 @@ const STATUS_ITEMS = [
 ];
 
 const BADGES = [
-  { text: "SFSU GRAD", color: "var(--color-blue,#89b4fa)" },
+  { text: "SFSU GRAD", color: "#89b4fa" },
   { text: "FULLSTACK", color: "var(--color-gold)" },
-  { text: "AI/ML", color: "var(--color-green,#a6e3a1)" },
+  { text: "AI/ML", color: "#a6e3a1" },
   { text: "OPEN TO WORK", color: "var(--color-flare)" },
 ];
 
@@ -103,10 +104,10 @@ export default function Hero() {
             </h1>
 
             <div className="mb-8 font-mono text-sm text-text-muted">
-              <span style={{ color: "var(--color-blue,#89b4fa)" }}>const</span>{" "}
+              <span style={{ color: "#89b4fa" }}>const</span>{" "}
               role ={" "}
-              <span style={{ color: "var(--color-green,#a6e3a1)" }}>
-                &quot;fullstack dev + ai integrator&quot;
+              <span style={{ color: "#a6e3a1" }}>
+                &quot;fullstack dev + feet enthusiast&quot;
               </span>
               <span className="blink text-gold">;</span>
             </div>
@@ -139,25 +140,13 @@ export default function Hero() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <div className="wm-window">
-              <div className="wm-titlebar">
-                <span className="wm-dot" style={{ background: "#f38ba8" }} />
-                <span className="wm-dot" style={{ background: "#f9e2af" }} />
-                <span className="wm-dot" style={{ background: "#a6e3a1" }} />
-                <span className="ml-2">kitty — zsh</span>
-              </div>
+            <WmWindow title="kitty — zsh">
               <div className="p-4" style={{ minHeight: "220px" }}>
                 <TypewriterText lines={TERM_LINES} />
               </div>
-            </div>
+            </WmWindow>
 
-            <div className="wm-window">
-              <div className="wm-titlebar">
-                <span className="wm-dot" style={{ background: "#f38ba8" }} />
-                <span className="wm-dot" style={{ background: "#f9e2af" }} />
-                <span className="wm-dot" style={{ background: "#a6e3a1" }} />
-                <span className="ml-2">neofetch</span>
-              </div>
+            <WmWindow title="neofetch">
               <div className="grid grid-cols-2 gap-x-4 gap-y-1 p-4 font-mono text-xs">
                 <div className="col-span-2 mb-2 text-gold">
                   kien@sfstate
@@ -183,7 +172,7 @@ export default function Hero() {
                   ))}
                 </div>
               </div>
-            </div>
+            </WmWindow>
           </div>
         </div>
 

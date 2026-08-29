@@ -1,7 +1,10 @@
 // Set NEXT_PUBLIC_POKER_URL once the poker game is deployed on
 // Railway/Render (see .env.local.example). Until then this renders a
 // standby placeholder instead of a broken iframe.
-export default function PokerEmbed({ fill = false }) {
+// active/onFrame/onPreviewChange are part of the shared demo-embed prop
+// contract (see ProjectsSection.js / FullscreenCarousel.js) but unused
+// here -- poker has no animation loop or preview to report.
+export default function PokerEmbed({ fill = false, active, onFrame, onPreviewChange }) {
   const url = process.env.NEXT_PUBLIC_POKER_URL;
 
   if (!url) {
